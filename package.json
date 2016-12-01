@@ -1,0 +1,114 @@
+{
+  "name": "vscode-mockthis",
+  "displayName": "Mock This",
+  "description": "Automatically generates jasmine test specs for TypeScript and JavaScript files.",
+  "version": "0.2.2",
+  "publisher": "duydao",
+  "author": {
+    "name": "Duy Dao",
+    "email": "daotrongduy@gmail.com",
+    "url": "https://github.com/duydao"
+  },
+  "icon": "images/icon.svg",
+  "galleryBanner": {
+    "color": "#252627",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "licenseUrl": "LICENSE",
+  "engines": {
+    "vscode": "^0.10.6"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onCommand:mockthis.toggleSpec",
+    "onCommand:mockthis.mockThis",
+    "onCommand:mockthis.mockEverything"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mockthis.toggleSpec",
+        "title": "Toggle Spec/Code",
+        "category": "Tests"
+      },
+      {
+        "command": "mockthis.mockThis",
+        "title": "Mock This"
+      },
+      {
+        "command": "mockthis.mockEverything",
+        "title": "Mock Everything"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mockthis.toggleSpec",
+        "key": "ctrl+j",
+        "mac": "cmd+j",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mockthis.mockThis",
+        "key": "ctrl+shift+j",
+        "mac": "cmd+shift+j"
+      },
+      {
+        "command": "mockthis.mockEverything",
+        "key": "ctrl+alt+j",
+        "mac": "cmd+alt+j"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Mock This configuration",
+      "properties": {
+        "mockthis.specSuffix": {
+          "default": [
+            ".spec"
+          ],
+          "description": "Spec suffix",
+          "type": "array"
+        },
+        "mockthis.defaultExtension": {
+          "default": [
+            ".spec"
+          ],
+          "description": "The default spec suffix will be used to create a spec if none is available",
+          "type": "string"
+        },
+        "mockthis.includeTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, type information is added to comment tags."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "lint": "node ./node_modules/tslint/bin/tslint src/**/*.ts",
+    "compile": "npm run lint && node ./node_modules/vscode/bin/compile -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "tslint": "^3.3.0",
+    "vscode": "^0.11.18"
+  },
+  "dependencies": {
+    "serialize-error": "^2.0.0",
+    "typescript": "^1.8.10"
+  },
+  "bugs": {
+    "url": "https://github.com/duydao/vscode-mockthis/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duydao/vscode-mockthis"
+  }
+}
