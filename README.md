@@ -15,14 +15,24 @@ code --install-extension vscode-mockthis-0.2.2.vsix
 `ctrl+j` or `cmd+j`
 
 ## Mock Everything
-Command Palette -> Mock Everything
-
 Generate a spec file for the code file.
 
+Command Palette -> Mock Everything
+
+or
+
+`ctrl+alt+j` or `cmd+alt+j`
+
 ## Mock This
-Command Palette -> Mock This
 
 Generate a spec for the selected method.
+
+Command Palette -> Mock This
+
+or 
+
+`ctrl+shift+j` or `cmd+shift+j`
+
 
 ## Todo
 - More options
