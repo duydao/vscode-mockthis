@@ -31,10 +31,24 @@ export class MockThis implements vs.Disposable {
       return;
     }
 
+    let sourceFile = this.getSourceFile(editor.document);
+    const nodes = utils.findChildrenOfKind(sourceFile);
+
+    let className: string;
+    let constructor: Constructor;
+    nodes.forEach(node => {
+      switch (node.kind) {
+        case ts.SyntaxKind.ClassDeclaration:
+            className = (<ts.ClassDeclaration>node).name.text;
+          break;
+        case ts.SyntaxKind.Constructor:
+          constructor = utils.convertToConstructor(<ts.ConstructorDeclaration>node);
+          break;
+      }
+    });
+
     const selection = editor.selection;
     const caret = selection.start;
-
-    const sourceFile = this.getSourceFile(editor.document);
 
     const position = ts.getPositionOfLineAndCharacter(sourceFile, caret.line, caret.character);
     const node = utils.findChildForPosition(sourceFile, position);
@@ -57,7 +71,7 @@ export class MockThis implements vs.Disposable {
     let specFile = this.getSpecFile(sourceFile.fileName);
     if (specFile && testMethod) {
       utils.touch(specFile.fileName);
-      this.writeSpecToEditor(specFile, utils.findConstructor(sourceFile), testMethod);
+      this.writeSpecToEditor(specFile, className, constructor, testMethod);
     } else if (!specFile) {
       this.showErrorMessage(commandName, 'Could not write specs to file');
     } else {
@@ -160,16 +174,16 @@ export class MockThis implements vs.Disposable {
     return methodReturnValue;
   }
 
-  private async writeSpecToEditor(specFile: ts.SourceFile, constructor: Constructor, testMethod: TestMethod): Promise<any> {
-    return this.writeToEditor({fileName: specFile.fileName, constructor, tests: [testMethod], insideDescribe: true});
+  private async writeSpecToEditor(specFile: ts.SourceFile, className: string, constructorRef: Constructor, testMethod: TestMethod): Promise<any> {
+    return this.writeToEditor({fileName: specFile.fileName, className, constructorRef, tests: [testMethod], insideDescribe: true});
   }
 
-  private async writeEverythingToEditor(specFile: ts.SourceFile, importStatement: string, className: string, constructor: Constructor, tests: TestMethod[]) {
-    return this.writeToEditor({fileName: specFile.fileName, importStatement, className, constructor, tests, insideDescribe: false});
+  private async writeEverythingToEditor(specFile: ts.SourceFile, importStatement: string, className: string, constructorRef: Constructor, tests: TestMethod[]) {
+    return this.writeToEditor({fileName: specFile.fileName, importStatement, className, constructorRef, tests, insideDescribe: false});
   }
 
-  private async writeToEditor({fileName, importStatement, className, constructor, tests, insideDescribe}: SpecConfig) {
-    let text = formatter.formatMock(importStatement, className, constructor, tests);
+  private async writeToEditor({fileName, importStatement, className, constructorRef, tests, insideDescribe}: SpecConfig) {
+    let text = formatter.formatMock(importStatement, className, constructorRef, tests);
     let uri = vs.Uri.parse(utils.toUri(fileName));
     let document = await vs.workspace.openTextDocument(uri);
     let editor = await vs.window.showTextDocument(document);

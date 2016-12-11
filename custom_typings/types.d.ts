@@ -36,7 +36,7 @@ interface SpecConfig {
   fileName: string,
   importStatement?: string,
   className?: string,
-  constructor: Constructor,
+  constructorRef: Constructor,
   tests: TestMethod[],
   insideDescribe: boolean
 }
