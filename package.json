@@ -2,7 +2,7 @@
   "name": "vscode-mockthis",
   "displayName": "Mock This",
   "description": "Automatically generates jasmine test specs for TypeScript and JavaScript files.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "publisher": "duydao",
   "author": {
     "name": "Duy Dao",
